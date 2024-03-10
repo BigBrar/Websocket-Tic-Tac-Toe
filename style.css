@@ -1,0 +1,224 @@
+body{
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.upper-table{
+    display: flex;
+}
+
+.upper-left{
+    width: 90px;
+    height: 70px;
+    position: relative;
+}
+
+.upper-left-button-o{
+    position: absolute;
+    /* height: 150px; */
+    color: white;
+    top: -45px;
+    right: 45%;
+    font-size: 0px;
+    height: 0px;
+    transition: font-size 0.5s;
+}
+
+.upper-left-button{
+    width: 90px;
+    color: white;
+    /* background-color: white; */
+    height: 70px;
+    font-size: 0px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: font-size 0.2s;
+}
+
+.upper-middle{
+    width: 90px;
+    height: 70px;
+    /* border: 2px; */
+    border-left: 2px;
+    border-right: 0px;
+    border-top: 0px;
+    border-bottom: 0px;
+    border-color: white;
+    border-style: solid;  
+    position: relative;
+}
+
+.upper-middle-button{
+    width: 90px;
+    color: white;
+    height: 70px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+
+.upper-right{
+    margin: 0;
+    padding: 0;
+    width: 90px;
+    height: 70px;
+    /* border: 2px; */
+    border-left: 2px;
+    border-right: 0px;
+    border-top: 0px;
+    border-bottom: 0px;
+    border-color: white;
+    border-style: solid;  
+    position: relative;
+}
+
+.upper-right-button{
+    width: 90px;
+    color: white;
+    height: 70px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.middle-left{
+    width: 92px;
+    height: 70px;
+    /* border: 2px; */
+    border-left: 0px;
+    border-right: 0px;
+    border-top: 2px;
+    border-bottom: 2px;
+    border-color: white;
+    border-style: solid;   
+    position: relative;  
+}
+
+.middle-left-button{
+    width: 90px;
+    color: white;
+    height: 70px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.middle-middle{
+    width: 92px;
+    height: 70px;
+    /* border: 2px; */
+    border-left: 2px;
+    border-right: 2px;
+    border-top: 2px;
+    position: relative;
+    border-bottom: 2px;
+    border-color: white;
+    border-style: solid;     
+}
+.middle-middle-button{
+    width: 90px;
+    color: white;
+    height: 70px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.middle-right{
+    width: 92px;
+    height: 70px;
+    /* border: 2px; */
+    position: relative;
+    border-left: 0px;
+    border-right: 0px;
+    border-top: 2px;
+    border-bottom: 2px;
+    border-color: white;
+    border-style: solid;     
+}
+
+.middle-right-button{
+    width: 90px;
+    color: white;
+    height: 70px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.bottom-left{
+    width: 92px;
+    position: relative;
+    height: 70px;
+    /* border: 2px; */
+    border-left: 0px;
+    border-right: 2px;
+    border-top: 0px;
+    border-bottom: 0px;
+    border-color: white;
+    border-style: solid;     
+}
+
+.bottom-left-button{
+    width: 90px;
+    color: white;
+    height: 70px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.bottom-middle{
+    width: 92px;
+    height: 70px;
+    /* border: 2px; */
+    position: relative;
+    border-left: 0px;
+    border-right: 2px;
+    cursor: pointer;
+    border-top: 0px;
+    border-bottom: 0px;
+    border-color: white;
+    border-style: solid;     
+    transition: background-color 0.2s;
+}
+
+.bottom-middle-button{
+    width: 90px;
+    color: white;
+    height: 70px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+
+
+.bottom-right{
+    width: 92px;
+    height: 70px;
+    /* border: 2px; */
+    border-left: 0px;
+    position: relative;
+    border-right: 0px;
+    border-top: 0px;
+    border-bottom: 0px;
+    border-color: white;
+    border-style: solid;     
+}
+
+.bottom-right-button{
+    width: 90px;
+    color: white;
+    height: 70px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}

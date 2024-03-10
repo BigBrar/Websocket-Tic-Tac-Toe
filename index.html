@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-div">
+        <div class="upper-table">
+            <div class="upper-left">
+                <button class="upper-left-button" id="upper-left-button"></button>
+                <div id="upper-left-button-opacity" class="upper-left-button-o">
+                    <p>|</p>
+                </div>
+            </div>
+            <div class="upper-middle">
+                <button class="upper-left-button" id="upper-middle-button"></button>
+                <div id="upper-middle-button-opacity" class="upper-left-button-o">
+                    <p>|</p>
+                </div>
+            </div>
+            <div class="upper-right">
+                <button class="upper-left-button" id="upper-right-button"></button>
+                <div id="upper-right-button-opacity" class="upper-left-button-o">
+                    <p>|</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="upper-table">
+            <div class="middle-left">
+                <button class="upper-left-button" id="middle-left-button"></button>
+                <div id="middle-left-button-opacity" class="upper-left-button-o">
+                    <p>|</p>
+                </div>
+            </div>
+            <div class="middle-middle">
+                <button class="upper-left-button" id="middle-middle-button"></button>
+                <div id="middle-middle-button-opacity" class="upper-left-button-o">
+                    <p>|</p>
+                </div>
+            </div>
+            <div class="middle-right">
+                <button class="upper-left-button" id="middle-right-button"></button>
+                <div id="middle-right-button-opacity" class="upper-left-button-o">
+                    <p>|</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="upper-table">
+            <div class="bottom-left">
+                <button class="upper-left-button" id="bottom-left-button"></button>
+                <div id="bottom-left-button-opacity" class="upper-left-button-o">
+                    <p>|</p>
+                </div>
+            </div>
+            <div class="bottom-middle">
+                <button class="upper-left-button" id="bottom-middle-button"></button>
+                <div id="bottom-middle-button-opacity" class="upper-left-button-o">
+                    <p>|</p>
+                </div>
+            </div>
+            <div class="bottom-right">
+                <button class="upper-left-button" id="bottom-right-button"></button>
+                <div id="bottom-right-button-opacity" class="upper-left-button-o">
+                    <p>|</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: center; align-items: center;" class="display-result">
+            <p class="result-announce" style="text-align: center; color: white;"></p>
+            <button onclick="reset_values();">Restart</button>
+        </div>
+
+        <div style="color: white;" class="total-details">
+            <p class="win-x"></p>
+            <p class="win-o"></p>
+            <p class="win-tie"></p>
+        </div>
+    </div>
+
+
+    <script src="script.js"></script>
+</body>
+</html>
