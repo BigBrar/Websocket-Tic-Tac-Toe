@@ -36,34 +36,78 @@ function toggle_player_mode(){
     }
     else{
         document.getElementById('player-mode-button').textContent = player_mode;
+        socket.send("client_disconnected")
+        socket.close()
+        document.querySelector('.loading-animation').style.display = 'none'
         multiplayer_on = false;
     }
 }
 
 function websocket_connect(){
+    // document.querySelector('.loading-animation').style.display = 'flex'
+    console.log("1st if statement")
     socket = new WebSocket('ws://localhost:8865');
     socket.onmessage = function(event) {
         // console.log('Message from server:', event.data);
-        if (event.data == 'your_move'){
+        if (event.data == 'finding_random_player'){
+            document.querySelector('.loading-animation').style.display = 'flex'
+            console.log("1st if statement")
+        }
+
+        else if (event.data == 'your_move'){
+            console.log("2nd if statement")
+            document.querySelector('.loading-animation').style.display = 'none'
             console.log("Message from the server ",event.data)
             first_move = true;
             current_user = 'x';
             check_if_won_array_socket('x');
-            check_if_won_array_socket('o');}
+            check_if_won_array_socket('o');
+        }
+
         else if (event.data == 'second_move'){
+            console.log("3rd if statement")
             current_user = 'x';
             check_if_won_array('x');
             check_if_won_array_socket('o');
             console.log("Message from the server ",event.data)
         }
+
         else if(event.data == 'client_disconnected'){
+            console.log("4th if statement")
             alert("Your opponent has disconnected...")
+        }
+
+        else if(event.data == 'restart_game'){
+            if (window.confirm("Your opponent wants to have a rematch...")) {
+                for (const button of buttons){
+                    button.textContent = ""; 
+                }
+                total_moves=0;
+                    winner = false;
+                    first_move = false;
+                for (element of global_opacity_change_block){
+                        // document.querySelector(`${element}`).style.opacity = 1;
+                        document.getElementById(element).setAttribute("style","font-size:0px;")
+                        // console.log("For loop ran...")
+                        // document.getElementsByClassName("upper-left-button").setAttribute("style","font-size:50px;")
+                        // console.log(element);
+                    }
+                    let button_elements = document.getElementsByClassName('upper-left-button');
+                for (element of button_elements){
+                    element.setAttribute("style","font-size:0px;");
+                }    
+                socket.send("restart_accepted")
+              } else {
+                socket.send("restart_declined")
+              }
         }
         else{
             if (winner){
                 console.log("Someone won..")
+                console.log("5th if statement")
             }
             else{
+                console.log("6th if statement")
                 enemy_move = event.data;
                 update_button_content(enemy_move);
                 check_if_won_array_socket('x');
@@ -253,20 +297,48 @@ function check_if_won_array_socket(symbol){
 
 
 function reset_values(){
-    for (const button of buttons){
-        button.textContent = ""; 
-    }
-    total_moves=0;
-        winner = false;
-    for (element of global_opacity_change_block){
-            // document.querySelector(`${element}`).style.opacity = 1;
-            document.getElementById(element).setAttribute("style","font-size:0px;")
-            // console.log("For loop ran...")
-            // document.getElementsByClassName("upper-left-button").setAttribute("style","font-size:50px;")
-            // console.log(element);
+    if (!multiplayer_on){
+        for (const button of buttons){
+            button.textContent = ""; 
         }
-        let button_elements = document.getElementsByClassName('upper-left-button');
-    for (element of button_elements){
-        element.setAttribute("style","font-size:0px;");
-    }    
+        total_moves=0;
+            winner = false;
+        for (element of global_opacity_change_block){
+                // document.querySelector(`${element}`).style.opacity = 1;
+                document.getElementById(element).setAttribute("style","font-size:0px;")
+                // console.log("For loop ran...")
+                // document.getElementsByClassName("upper-left-button").setAttribute("style","font-size:50px;")
+                // console.log(element);
+            }
+            let button_elements = document.getElementsByClassName('upper-left-button');
+        for (element of button_elements){
+            element.setAttribute("style","font-size:0px;");
+        }    
+    }
+
+    else if(multiplayer_on){
+        if (winner){
+            socket.send("restart_game")
+            for (const button of buttons){
+                button.textContent = ""; 
+            }
+            total_moves=0;
+                winner = false;
+                first_move=false;
+            for (element of global_opacity_change_block){
+                    // document.querySelector(`${element}`).style.opacity = 1;
+                    document.getElementById(element).setAttribute("style","font-size:0px;")
+                    // console.log("For loop ran...")
+                    // document.getElementsByClassName("upper-left-button").setAttribute("style","font-size:50px;")
+                    // console.log(element);
+                }
+                let button_elements = document.getElementsByClassName('upper-left-button');
+            for (element of button_elements){
+                element.setAttribute("style","font-size:0px;");
+            }    
+        }
+        else{
+            console.log("Nothing will happen...")
+        }
+    }
 }

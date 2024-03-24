@@ -15,6 +15,31 @@ body{
     right: 50px;
 }
 
+.loading-animation{
+    position: absolute;
+    top: 20px;
+    left: 43%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    /* background-color: white; */
+}
+
+.connecting{
+    color: white;
+    font-weight: 600;
+    margin-right: 10px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 16px;
+}
+
+.loading-animation-img{
+    width: 20px;
+    height: 20px;
+    padding: 5px;
+    /* background-color: black; */
+}
+
 .player-mode-button{
     padding: 5px;
     font-size: 16px;

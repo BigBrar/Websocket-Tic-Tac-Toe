@@ -38,7 +38,7 @@ async def put_waiting(websocket):
     # first_user = websocket
     clients.append([websocket])
     
-    await websocket.send("Connecting you to some random player...")
+    await websocket.send("finding_random_player")
 
 async def done_waiting(websocket):
     # global waiting_socket
@@ -54,26 +54,76 @@ async def done_waiting(websocket):
     # waiting_socket = False
 
 async def handle_message(websocket,path):
-    if len(clients) == 0: #check if there are values in clients list
-        await put_waiting(websocket)
-    if len(clients[-1]) == 2: # check if the last element length of clients list is 2
-        await put_waiting(websocket) #tell the user to wait for other player connection
-    elif len(clients[-1]) == 1 and clients[-1][0] != websocket : # check if the last element length is only one...
-        await done_waiting(websocket)
-    # await websocket.send("You are connected to the server...")
-    # await increment_user(websocket)
-    while True:
-        message = await websocket.recv()
-        if message == "i_won":
-            print("Someone won...")    
+    try:
+        if len(clients) == 0: #check if there are values in clients list
+            await put_waiting(websocket)
+        if len(clients[-1]) == 2: # check if the last element length of clients list is 2
+            await put_waiting(websocket) #tell the user to wait for other player connection
+        elif len(clients[-1]) == 1 and clients[-1][0] != websocket : # check if the last element length is only one...
+            await done_waiting(websocket)
+        # await websocket.send("You are connected to the server...")
+        # await increment_user(websocket)
+        while True:
+            message = await websocket.recv()
+            if message == "i_won":
+                print("Someone won...")  
+            
+            elif message is None:
+                for things in clients:
+                    if websocket in things:
+                        if things[0] == websocket:
+                            await things[1].send('client_disconnected')
+                        elif things[1] == websocket:
+                            await things[0].send('client_disconnected')   
+
+            elif message == "restart_game":
+                for things in clients:
+                    if websocket in things:
+                        if things[0] == websocket:
+                            await things[1].send('restart_game')
+                        elif things[1] == websocket:
+                            await things[0].send('restart_game')   
+            
+            elif message == "client_disconnected":
+                try:
+                    for things in clients:
+                        if websocket in things:
+                            if things[0] == websocket:
+                                await things[1].send('client_disconnected')
+                            elif things[1] == websocket:
+                                await things[0].send('client_disconnected')   
+                except:
+                    pass
+            
+            elif message == 'restart_accepted':
+                for things in clients:
+                    if websocket in things:
+                        if things[0] == websocket:
+                            await things[1].send('restart_accepted')
+                            await things[1].send('your_move')
+                            await increment_messages(things[1])
+                        elif things[1] == websocket:
+                            await things[0].send('restart_accepted')  
+                            await things[0].send('your_move')  
+                            
+
+            for things in clients:
+                if websocket in things:
+                    if things[0] == websocket:
+                        await things[1].send(message)
+                        await increment_messages(things[1])
+                    elif things[1] == websocket:
+                        await things[0].send(message)
+                        await increment_messages(things[0])
+    except websockets.exceptions.ConnectionClosedOK:
         for things in clients:
-            if websocket in things:
-                if things[0] == websocket:
-                    await things[1].send(message)
-                    await increment_messages(things[1])
-                elif things[1] == websocket:
-                    await things[0].send(message)
-                    await increment_messages(things[0])
+                if websocket in things:
+                    if things[0] == websocket:
+                        await things[1].send("client_disconnected")
+                        await increment_messages(things[1])
+                    elif things[1] == websocket:
+                        await things[0].send('client_disconnected')
+                        await increment_messages(things[0])
         # if websocket in clients:
         #     await second_user.send(message)
         # elif websocket == second_user:
