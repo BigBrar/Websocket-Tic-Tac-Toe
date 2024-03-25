@@ -36,10 +36,9 @@ function toggle_player_mode(){
     }
     else{
         document.getElementById('player-mode-button').textContent = player_mode;
-        socket.send("client_disconnected")
-        socket.close()
         document.querySelector('.loading-animation').style.display = 'none'
         multiplayer_on = false;
+        socket.close()
     }
 }
 
@@ -69,15 +68,16 @@ function websocket_connect(){
             current_user = 'x';
             check_if_won_array('x');
             check_if_won_array_socket('o');
-            console.log("Message from the server ",event.data)
+            console.log("Message from the server ",event.data);
         }
 
         else if(event.data == 'client_disconnected'){
-            console.log("4th if statement")
-            alert("Your opponent has disconnected...")
+            console.log("4th if statement");
+            alert("Your opponent has disconnected...");
         }
 
         else if(event.data == 'restart_game'){
+            console.log("Restart game requested...")
             if (window.confirm("Your opponent wants to have a rematch...")) {
                 for (const button of buttons){
                     button.textContent = ""; 
@@ -319,6 +319,7 @@ function reset_values(){
     else if(multiplayer_on){
         if (winner){
             socket.send("restart_game")
+            console.log("Restart game ...")
             for (const button of buttons){
                 button.textContent = ""; 
             }
