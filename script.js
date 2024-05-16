@@ -7,9 +7,17 @@ let previous_user = 'o';
 let winner = false;
 let global_opacity_change_block = [];
 let player_mode = "Multiplayer OFF!!!";
+let ai_mode = "AI OFF!!!";
+let ai_on = false;
 let multiplayer_on = false;
 let socket;
 let enemy_move;
+let new_moves = [["upper-left-button", "upper-middle-button", "upper-right-button"],['middle-left-button', 'middle-middle-button', 'middle-right-button'],['bottom-left-button', 'bottom-middle-button', 'bottom-right-button']];
+let correct_moves = [[null, null, null],[null, null, null],[null, null, null]];
+
+let first_line = ["upper-left-button", "upper-middle-button", "upper-right-button"];
+let second_line = ['middle-left-button', 'middle-middle-button', 'middle-right-button']
+let third_line = ['bottom-left-button', 'bottom-middle-button', 'bottom-right-button']
 
 let first_move = false;
 
@@ -24,6 +32,96 @@ const winningMoves = [
     ['upper-right-button', 'middle-middle-button', 'bottom-left-button']
 ] 
 
+function fetchAIReponse(board) {
+    const boardParam = encodeURIComponent(JSON.stringify(board));
+    // const url = `https://1ef2f89a-734f-4e20-ba5b-e50c06127709-00-11jwbv1kiwbxu.riker.repl.co/?board=${boardParam}`;
+    const url = 'https://www.google.com/';
+
+    return fetch(url, {
+        mode: 'no-cors'
+      })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('resopnse',response.json);
+                console.log("Response is ",response.json);
+            }
+            return response.json();
+        })
+        .then(data => {
+            return data;
+        })
+        // .catch(error => {
+        //     throw new Error('Error fetching data:', error);
+        //     console.log("Response is - ",response.json)
+        // });
+}
+// // Example usage:
+// const board = [['X', null, null], [null, null, null], [null, null, null]];
+//     fetchAIReponse(board)
+//     .then(data => {
+//         console.log('Response:', data);
+//     })
+//     .catch(error => {
+//         console.error(error);
+//     });
+
+function register_move(user_move,user){ //for getting and making AI move 
+    if (first_line.includes(user_move)){
+        index = new_moves[0].indexOf(user_move)
+        console.log("First if executed")
+        console.log("The index is - ",index)
+        console.log("the value of the index is",first_line[index])
+        best_move = fetchAIReponse(correct_moves);
+        // best_move = 'upper-left-button';
+        move_swap();
+        update_button_content(best_move);
+        check_if_won_array_socket('x');
+        check_if_won_array_socket('o');
+    }
+
+    else if (second_line.includes(user_move)){
+        index = new_moves[1].indexOf(user_move)
+        console.log("Second if executed")
+        console.log("The index is - ",index)
+        console.log("the value of the index is",second_line[index])
+        correct_moves[1][index] = user;
+        best_move = fetchAIReponse(correct_moves);
+        move_swap();
+        update_button_content(best_move);
+        check_if_won_array_socket('x');
+        check_if_won_array_socket('o');
+    }
+
+    else if (third_line.includes(user_move)){
+        index = new_moves[2].indexOf(user_move)
+        console.log("Third if executed")
+        console.log("The index is - ",index)
+        console.log("the value of the index is",third_line[index])
+        correct_moves[2][index] = user;
+        best_move = fetchAIReponse(correct_moves);
+        move_swap();
+        update_button_content(best_move);
+        check_if_won_array_socket('x');
+        check_if_won_array_socket('o');
+    }
+    else{
+        console.log("The user move is ",typeof(user_move))
+    }
+}
+
+
+// function get_ai_move(currnet_mvoes) {
+//     fetch('https://www.google.com')
+//       .then(response => {
+//         if (!response.ok) {
+//           throw new Error('Network response was not ok ' + response.statusText);
+//         }
+//         return response.text();
+//       })
+//       .then(html => console.log(html))
+//       .catch(error => console.error('There has been a problem with your fetch operation:', error));
+//   }
+  
 
 
 
@@ -42,7 +140,21 @@ function toggle_player_mode(){
     }
 }
 
-function websocket_connect(){
+function toggle_ai_mode(){ //for turning on AI mode..
+    ai_mode_button = document.getElementById('player-mode-button-2')
+    if (ai_mode_button.textContent === ai_mode){
+        document.getElementById('player-mode-button-2').textContent = "AI ON!!!"
+        ai_on = true;
+    }
+    else{
+        document.getElementById('player-mode-button-2').textContent = ai_mode;
+        document.querySelector('.loading-animation').style.display = 'none';
+        ai_on = true;
+        // socket.close()s
+    }
+}
+
+function websocket_connect(){ //for handling websockets connections...
     // document.querySelector('.loading-animation').style.display = 'flex'
     console.log("1st if statement")
     socket = new WebSocket('ws://localhost:8865');
@@ -133,6 +245,40 @@ buttons.forEach(button => {
     button.addEventListener('click', event => {
         const clickedButton = event.target;
         total_moves++;
+        if (ai_on){
+            
+            if (clickedButton.textContent){
+                console.log("nothing happens...")}
+            else if (winner){
+                console.log("nothing happens...2.0")
+            }    
+            else if(total_moves == 9){
+                if(check_moves()){console.log("A winner has been announced...")
+                }
+                else{
+                    document.querySelector('.result-announce').textContent = "It is a TIE...";
+                    winner = true;
+                    total_ties++;
+                    document.querySelector('.win-tie').textContent = `Total Ties: ${total_ties}`;
+                }
+                if (!clickedButton.textContent){
+                    move_swap();
+                    clickedButton.textContent = current_user;
+                    console.log(`Button "${clickedButton.textContent}" was clicked. \ nCurrent user is - ${current_user}`);
+                    clickedButton.setAttribute("style","font-size:35px;");
+                    check_if_won_array('o');
+                }
+            }else{
+                move_swap();
+                if (!clickedButton.textContent){
+                    clickedButton.textContent = current_user;
+                    clickedButton.setAttribute("style","font-size:35px;");
+                    console.log("Function ran...")
+                    register_move(clickedButton.id,current_user);
+                    check_moves();
+                }
+             }   
+        }
         if (!multiplayer_on){
             
             if (clickedButton.textContent){
@@ -154,7 +300,7 @@ buttons.forEach(button => {
                     clickedButton.textContent = current_user;
                     console.log(`Button "${clickedButton.textContent}" was clicked. \ nCurrent user is - ${current_user}`);
                     clickedButton.setAttribute("style","font-size:35px;");
-                    check_if_won_array_socket('o');
+                    check_if_won_array('o');
                 }
                         
             }else{
